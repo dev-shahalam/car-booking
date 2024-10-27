@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Car;
 use App\Models\User;
 use App\Mail\OTPMail;
+use App\Models\Rental;
 use App\Helper\JWTToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -39,8 +40,11 @@ class UserController extends Controller {
         $role = $request->headers->get('role');
 
         $admin = User::where('email', $email)->first();
+        $car=Car::all();
+        $rental=Car::where('status','rented')->get();
+
         if ($admin && $role == 'admin') {
-            return view('admin.dashboard-page', compact('admin'));
+            return view('admin.dashboard-page', compact('admin','car','rental'));
         }
         return redirect()->route('login')->with('error', 'You are not authorized to access this page');
     }

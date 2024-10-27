@@ -13,7 +13,7 @@ class CarController extends Controller
     {
         $user_id = $request->header('id');
         $admin = User::where('id', $user_id)->where('role', 'admin')->first();
-        if ($user_id) {
+        if ($admin) {
             $cars = Car::orderByDesc('id')->where('user_id', $user_id)->get();
             return view('pages.dashboard.car-page', compact('cars', 'admin'));
         } else {
@@ -146,6 +146,16 @@ class CarController extends Controller
     public function singleCarPage(Request $request){
         $car = Car::find($request->id);
         return view('user.singleCarPage', compact('car'));
+
+        // $car_id = $request->id;
+        // $car = Car::find($car_id);
+        // if($car){
+        //     $request->headers->set('id', $car_id);
+        //     return view('user.singleCarPage', compact('car'));
+        // }else{
+        //     return redirect()->route('home');
+        // }
+
     }
 
 

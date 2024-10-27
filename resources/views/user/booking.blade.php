@@ -190,11 +190,11 @@
                                         class="label-style text-capitalize form-label text-dark">Vehicle</label>
                                     <div class="input-group date">
 
-                                        <select id="priceOption" class="form-select form-control p-3" name="car_id"
-                                            aria-label="Default select example" style="background-image: none">
+                                        <select id="priceOption" class="form-select form-control p-3" name="car_name"
+                                            aria-label="Default select e xample" style="background-image: none">
                                             <option selected>Select Vehicle</option>
                                             @foreach ($cars as $car)
-                                                <option value="{{ $car->id }}">{{ $car->car_name }}</option>
+                                                <option  name="car_name" value="{{ $car->car_name}}">{{ $car->car_name }}</option>
                                             @endforeach
                                         </select>
 
@@ -416,11 +416,11 @@
     <script>
         $(document).ready(function() {
             $('#priceOption').on('change', function() {
-                var carId = $(this).val();
+                var carName = $(this).val();
 
                 // Make an AJAX request to get the price
                 $.ajax({
-                    url: '/get-price/' + carId,
+                    url: '/get-price/' + carName,
                     type: 'GET',
                     dataType: 'json',
                     success: function(response) {
@@ -430,7 +430,6 @@
                         $('#model').text(response.car.model);
                         $('#price').text('BDT ' + response.car.daily_rent);
                         $('#description').text(response.car.description);
-
 
                     },
                     error: function() {

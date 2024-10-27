@@ -10,7 +10,6 @@
                         </div>
                     </div>
                     <hr class="bg-dark " />
-
                     <div class="col-md-12 col-sm-12">
                         <div style="overflow-x: auto;">
                             <table class="table" id="tableData">
@@ -27,12 +26,6 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($rentals as $rental)
-                                        {{-- <tr>
-                                <form id="deleteForm" action="{{ route('delete-customer', $customer->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                </form> --}}
-
                                         <td>{{ $rental->user->name }}</td>
                                         <td>{{ $rental->car->car_name }}</td>
                                         <td>{{ $rental->rental_start_date }}</td>
@@ -40,6 +33,7 @@
                                         <td>{{ $rental->total_price }}</td>
 
                                         <td>
+
                                             @if ($rental->status == 'completed')
                                                 <span class="badge bg-success">Completed</span>
                                             @elseif($rental->status == 'cancelled')
@@ -47,15 +41,17 @@
                                             @elseif($rental->status == 'ongoing')
                                                 <span class="badge bg-warning text-dark">Ongoing</span>
                                             @endif
+
                                         </td>
-
                                         <td>
-                                            {{-- <a href="{{'update-customer/'.$rental->id}}" class="px-3 btn me-3 text-white btn-sm bg-info">Rental History<a> --}}
-                                            {{-- <a href="{{'update-status/'.$rental->id}}" class="px-3 btn me-3 text-white btn-sm btn-primary">Update</a> --}}
-                                            <a type="button"
-                                            class="px-3 btn btn-sm btn-danger" data-bs-toggle="modal"
-                                                data-bs-target="#deleteConfirmationModal">Delete</a>
 
+                                            <button type="button"
+                                                class="btn btn-sm btn-primary editStatusBtn"
+                                                data-id="{{ $rental->id }}"
+                                                data-status="{{ $rental->status }}"
+                                                data-bs-toggle="modal" data-bs-target="#update-modal">
+                                                Update
+                                            </button>
                                         </td>
                                         </tr>
                                     @endforeach
@@ -68,57 +64,47 @@
         </div>
     </div>
 
-    {{-- Delete Car start --}}
 
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+     <!-- Edit status Modal -->
+     <div class="modal fade" id="update-modal" tabindex="-1" aria-labelledby="update-modal" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteConfirmationLabel">Update Status</h5>
+                    <h5 class="modal-title" id="editStatusLabel">Edit Status</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                {{-- <div class="modal-body">
-                <p>Are you sure you want to update status</p>
-                </div> --}}
-                <form id="updateStatusForm" action="{{ route('update-status', $rental->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="modal-body">
-
-                        <select name="status" id="status" class="form-select">
-                            <option value="completed">Completed</option>
-                            <option value="cancelled">Cancelled</option>
-                            <option selected value="ongoing">Ongoing</option>
-                        </select>
-
-                    </div>
-                </form>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                <div class="modal-body">
+                    <form id="editCategoryForm" method="POST" action="{{ route('update-status') }}">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" id="statusId" name="id">
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" id="status" name="status" class="form-control">
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                                <option value="ongoing">Ongoing</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-5">Update</button>
+                    </form>
                 </div>
-
             </div>
         </div>
     </div>
 
-
-    {{-- Delete Form --}}
-
-
-    {{-- Delete Script --}}
     <script>
-        document.getElementById('confirmDelete').addEventListener('click', function() {
-            document.getElementById('updateStatusForm').submit();
+        // On clicking the edit button, fill in the modal fields with the current data
+        document.querySelectorAll('.editStatusBtn').forEach(button => {
+            button.addEventListener('click', function() {
+                const dataId = this.getAttribute('data-id');
+                const dataStatus = this.getAttribute('data-status');
+
+                document.getElementById('statusId').value = dataId;
+                document.getElementById('status').value = dataStatus;
+            });
         });
     </script>
-
-    {{-- Delete Car End --}}
-
-
-
 
 
     {{-- For data table  --}}
@@ -129,4 +115,29 @@
             });
         });
     </script>
+
+@if (session()->has('success'))
+    <div id="notification" class=" row justify-content-center">
+        <div class="position-absolute top-50 start-50 translate-middle col-sm-3 alert alert-success text-center text-white"
+            role="alert">
+            {{ session()->get('success') }}
+        </div>
+    </div>
+@endif
+
+@if (session()->has('error'))
+    <div id="notification" class=" row justify-content-center">
+        <div class="position-absolute top-50 start-50 translate-middle col-sm-3 alert alert-danger text-white text-center"
+            role="alert">
+            {{ session()->get('error') }}
+        </div>
+    </div>
+@endif
+
+
+
+
+
+
+
 @endsection()

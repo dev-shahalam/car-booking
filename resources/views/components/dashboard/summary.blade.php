@@ -7,9 +7,9 @@
                         <div class="col-9 col-lg-8 col-md-8 col-sm-9">
                             <div>
                                 <h5 class="mb-0 text-capitalize font-weight-bold">
-                                    <span id="product"></span>
+                                    <span id="product">{{$car->count()}}</span>
                                 </h5>
-                                <p class="mb-0 text-sm">Product</p>
+                                <p class="mb-0 text-sm">Total Cars</p>
                             </div>
                         </div>
                         <div class="col-3 col-lg-4 col-md-4 col-sm-3 text-end">
@@ -29,9 +29,9 @@
                         <div class="col-9 col-lg-8 col-md-8 col-sm-9">
                             <div>
                                 <h5 class="mb-0 text-capitalize font-weight-bold">
-                                    <span id="category"></span>
+                                    <span id="category">{{$rental->count()}}</span>
                                 </h5>
-                                <p class="mb-0 text-sm">Category</p>
+                                <p class="mb-0 text-sm">Rented Cars</p>
                             </div>
                         </div>
                         <div class="col-3 col-lg-4 col-md-4 col-sm-3 text-end">

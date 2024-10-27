@@ -134,11 +134,8 @@
                             </ul>
                         </li> --}}
 
-                        @if (isset($user))
                             <a class="fw-bold text-capitalize fs-5 px-3 py-2" href="{{ route('logout') }}">Logout</a>
-                        @else
-                            <a class="fw-bold text-capitalize fs-5 px-3 py-2" href="{{ route('login') }}">Login</a>
-                        @endif
+
 
                         {{-- <a class="fw-bold text-capitalize fs-5 px-3 py-2" target="_blank"
                             href="{{ route('login') }}">Login</a> --}}
@@ -188,8 +185,11 @@
                                     <label for="vehicle"
                                         class="label-style text-capitalize form-label text-dark">Vehicle</label>
                                     <div class="input-group date">
-                                        <input type="text" class="form-control p-3" name="car_id"
-                                            value="{{ $car->car_name }}" readonly>
+
+                                        {{-- <input type="number" name="car_id" value="{{ $car->id }}" hidden> --}}
+
+                                        <input type="text" class="form-control p-3"
+                                            value="{{ $car->car_name }}" name="car_name"  readonly>
                                         <span class="search-icon-position position-absolute p-3">
                                             <iconify-icon class="search-icons" icon="solar:bus-outline"></iconify-icon>
                                         </span>
@@ -200,7 +200,7 @@
                                 class="col-6 col-md-6 col-lg-6 mt-4   mt-lg-0 d-flex mx-auto justify-content-start align-items-center">
                                 <div class="p-3">
                                     {{-- // info badge just for show --}}
-                                    <span class="text-capitalize text-success "> {{ $car->model }} </span>
+                                    <h4 class="text-capitalize text-success "> {{ $car->status }} </h4>
                                     {{-- <h6> Price Per Day: <span id="unitPrice">BDT 0.00</span></h6> --}}
                                 </div>
                             </div>

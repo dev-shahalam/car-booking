@@ -44,7 +44,7 @@
 
                                 <div class="col-12 p-1">
                                     <br/>
-                                    <img class="w-15" id="image" src="{{asset('images/default.jpg')}}"/>
+                                    <img class="w-15" id="newImg" src="{{asset('images/default.jpg')}}"/>
                                     <br/>
 
                                     <label class="form-label">Image</label>

@@ -116,7 +116,7 @@ Route::get('rental', [RentalController::class, 'carBooking'])->name('rental')
 
 
 
-Route::get('/get-price/{id}', [RentalController::class, 'getPrice'])->name('get.price')
+Route::get('/get-price/{car_name}', [RentalController::class, 'getPrice'])->name('get.price')
 ->middleware(AuthMiddleware::class);
 
 
@@ -130,7 +130,11 @@ Route::get('rental-history/{id}', [RentalController::class, 'rentalHistory'])->n
 Route::get('rental-page', [RentalController::class, 'rentalPage'])->name('rental-page')
 ->middleware(AuthMiddleware::class);
 
-Route::PUT('update-status/{id}', [RentalController::class, 'updateStatus'])->name('update-status')
+
+Route::get('update-modal', [RentalController::class, 'updateStatusdata'])->name('update-status')
+->middleware(AuthMiddleware::class);
+
+Route::PUT('update-status/update', [RentalController::class, 'updateStatus'])->name('update-status')
 ->middleware(AuthMiddleware::class);
 
 
@@ -143,3 +147,8 @@ Route::delete('delete-rental/{id}', [RentalController::class, 'deleteRental'])->
 
 
 // Rental Route End
+
+
+Route::get('/show-modal', function () {
+    return view('components.rental.status-update');
+})->name('show-modal');
