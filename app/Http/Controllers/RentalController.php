@@ -22,43 +22,53 @@ class RentalController extends Controller
     // Update the status of the rental
     public function updateStatus(Request $request)
     {
-        $id = $request->input('id');
-        $status = $request->input('status');
+        $id = $request->statusId;
+        $status = $request->status;
         $rental = Rental::find($id);
+
         if ($rental) {
-            if ($rental->status == 'completed' && $status == 'completed') {
-               Car::where('id', $rental->car_id)->update(
-                    [
-                        'status' => 'available'
-                    ]
-                );
-                return redirect()->back()->with('error', 'Rental already completed');
-            }elseif($rental->status=='cancelled' && $status=='cancelled'){
-                Car::where('id', $id)->update(
-                    [
-                        'status' => 'available'
-                    ]
-                );
-                return redirect()->back()->with('error', 'Rental already cancelled');
 
-            }elseif($rental->status=='ongoing' && $status=='ongoing'){
-                Car::where('id', $rental->car_id)->update(
-                    [
+            if ($status == 'completed' || $status == 'cancelled') {
+                if ($rental->status == 'completed') {
+                    return redirect()->back()->with('error', 'Rental Already Completed');
+                }
+                if ($rental->status == 'cancelled' && $status == 'completed') {
+                    return redirect()->back()->with('error', 'Please Ongoing First');
+                }
+                if ($rental->status == 'cancelled') {
+                    return redirect()->back()->with('error', 'Rental Already Cancelled');
+                }
+                $rental->update([
+                    'status' => $status
+                ]);
+                $car = Car::where('id', $rental->car_id)->first();
+                $car->update([
+                    'status' => 'available'
+                ]);
+                return redirect()->back()->with('success', 'Rental Status Updated');
+            } else {
+                if ($status == 'ongoing') {
+
+                    if ($rental->status == 'completed') {
+                        return redirect()->back()->with('error', 'Rental Already Completed');
+                    }
+                    $rental->update([
+                        'status' => $status
+                    ]);
+                    $car = Car::where('id', $rental->car_id)->first();
+                    $car->update([
                         'status' => 'rented'
-                    ]
-                );
-                return redirect()->back()->with('error', 'Rental already ongoing');
-            }
+                    ]);
 
-            else{
-                $rental = Rental::where('id', $id)->update(['status' => $status]);
-                return redirect()->back()->with('success', 'Status updated successfully');
+                    return redirect()->back()->with('success', 'Rental Status Updated');
+                }
             }
-
         } else {
-            return redirect()->back()->with('error', 'Rental not found');
+            return redirect()->back()->with('error', 'Rental Not Found');
         }
     }
+
+
 
 
     // Car Booking Page
@@ -68,8 +78,6 @@ class RentalController extends Controller
         $user = User::find($request->header('id'));
         return view('user.booking', compact('cars', 'user'));
     }
-
-
     public function getPrice($car_name)
     {
         $car = Car::where('car_name', $car_name)->first();
@@ -82,55 +90,7 @@ class RentalController extends Controller
     }
 
 
-
-    // public function store(Request $request){
-    //    $user_id=$request->header('id');
-
-    //    $request->validate([
-    //     'car_id' => 'required',
-    //     'rental_start_date' => 'required',
-    //     'rental_end_date' => 'required',
-    //     'pick_location' => 'required',
-    //     'drop_location' => 'required',
-    //    ]);
-
-    //    $car_id=$request->car_id;
-    //    $rental_start_date=$request->rental_start_date;
-    //    $rental_end_date=$request->rental_end_date;
-    //    $unit_price=Car::where('id',$car_id)->value('daily_rent');
-    //    $pickDateTime=Carbon::parse($rental_start_date);
-    //    $dropDateTime=Carbon::parse($rental_end_date);
-
-    //    $pick_location=$request->pick_location;
-    //    $drop_location=$request->drop_location;
-
-    // //    $total_days=$pickDateTime->diffInDays($dropDateTime);
-    //    $total_hours=$pickDateTime->diffInHours($dropDateTime);
-
-
-    //    $total_price=$total_hours*$unit_price/24;
-
-    //    Rental::create([
-    //     'user_id' => $user_id,
-    //     'car_id' => $car_id,
-    //     'rental_start_date' => $pickDateTime,
-    //     'rental_end_date' => $dropDateTime,
-    //     'total_price' => $total_price,
-    //     'pick_location' => $pick_location,
-    //     'drop_location' => $drop_location,
-    //    ]);
-
-    //    Car::where('id',$car_id)->update(['status'=>'rented']);
-
-    //    return redirect()->route('rental')->with('success', 'Car booked successfully');
-
-
-    // }
-
-
-
-
-// Booking Rental Details
+    // Booking Rental Details
     public function store(Request $request)
     {
         $user_id = $request->header('id');
@@ -146,8 +106,6 @@ class RentalController extends Controller
         // if (!$car_id || !$request->car_id) {
         //     return redirect()->back()->with('error', 'Car ID is missing');
         // }
-
-
 
         $request->validate([
             'car_name' => 'required',
@@ -217,7 +175,7 @@ class RentalController extends Controller
             $rentals = Rental::where('user_id', $customer_id)->with('car')->get();
             return view('components.rental.rental-history', compact('rentals'));
         } else {
-            return redirect()->back()->withErrors('error', 'User not found');
+            return redirect()->back()->with('error', 'User not found');
         }
     }
 

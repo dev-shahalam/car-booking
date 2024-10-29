@@ -77,7 +77,7 @@
                     <form id="editCategoryForm" method="POST" action="{{ route('update-status') }}">
                         @csrf
                         @method('PUT')
-                        <input type="hidden" id="statusId" name="id">
+                        <input type="hidden" id="statusId" name="statusId">
                         <div class="mb-3">
                             <label for="status" class="form-label">Status</label>
                             <select name="status" id="status" name="status" class="form-control">
