@@ -40,11 +40,14 @@ class UserController extends Controller {
         $role = $request->headers->get('role');
 
         $admin = User::where('email', $email)->first();
+        $customer=User::where('role','customer');
         $car=Car::all();
         $rental=Car::where('status','rented')->get();
+        $ongoing= Rental::where('status','ongoing')->get();
+        $totalPrice=Rental::where('status','completed')->get();
 
         if ($admin && $role == 'admin') {
-            return view('admin.dashboard-page', compact('admin','car','rental'));
+            return view('admin.dashboard-page', compact('admin','car','rental','customer','totalPrice','ongoing'));
         }
         return redirect()->route('login')->with('error', 'You are not authorized to access this page');
     }
@@ -62,17 +65,6 @@ class UserController extends Controller {
         return redirect()->route('login')->with('error', 'You are not authorized to access this page');
     }
 
-    // Customer Dashboard Page
-    // public function userDashboard(Request $request) {
-    //     $email = $request->headers->get('email');
-    //     $role = $request->headers->get('role');
-    //     $user = User::where('email', $email)->first();
-    //     if ($user && $role == 'customer') {
-    //         return view('user.home',compact('user'));
-    //         // return view('user.home')->with('user', $user);
-    //     }
-    //     return redirect()->route('homepage')->with('error', 'You are not authorized to access this page');
-    // }
 
 
     public function homePage(){
@@ -88,29 +80,13 @@ class UserController extends Controller {
 
 
 
-    // public function genarelUser(Request $request){
-    //     $email = $request->header('email');
-    //     $user = User::where('email', $email)->first();
-    //     if($user){
-    //         return view('user.home',compact('user'));
-    //     }
-    //     return view('user.home');
-    // }
-
-
-
-
-
-
-
-
     // Register Controller
     public function registerUser(Request $request) {
         try {
             $request->validate([
                 'name' => 'required',
                 'email' => 'required | email | unique:users,email',
-                'password' => 'required',
+                'password' => 'required | min:6',
             ]);
 
             $user = User::create([

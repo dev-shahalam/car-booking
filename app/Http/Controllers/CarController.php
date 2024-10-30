@@ -102,7 +102,7 @@ class CarController extends Controller
                 'user_id' => $user_id,
                 'image' => $img_path
             ]);
-            return redirect()->route('car-page');
+            return redirect()->route('car-page')->with('success','Car Updated');
         } else {
             $car->update([
                 'car_name' => $request->input('car_name'),
@@ -113,7 +113,7 @@ class CarController extends Controller
                 'description' => $request->input('description'),
                 'user_id' => $user_id
             ]);
-            return redirect()->route('car-page');
+            return redirect()->route('car-page')->with('success','Car Updated To  ' .$status);
         }
     }
 

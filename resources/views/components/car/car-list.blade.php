@@ -87,12 +87,35 @@
 </div>
 
 
+
 {{-- Delete Form --}}
 
 <form id="deleteForm" action="{{ route('delete-car', $car->id) }}" method="POST">
     @csrf
     @method('DELETE')
 </form>
+
+
+
+@if (session()->has('success'))
+<div id="notification" class=" row justify-content-center">
+    <div class="position-absolute top-50 start-50 translate-middle col-sm-3 alert alert-success text-center text-white"
+        role="alert">
+        {{ session()->get('success') }}
+    </div>
+</div>
+@endif
+
+@if (session()->has('error'))
+<div id="notification" class=" row justify-content-center">
+    <div class="position-absolute top-50 start-50 translate-middle col-sm-3 alert alert-danger text-white text-center"
+        role="alert">
+        {{ session()->get('error') }}
+    </div>
+</div>
+@endif
+
+
 
 {{-- Delete Script --}}
 <script>

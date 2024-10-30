@@ -9,13 +9,13 @@
                     <p class="text-secondary pb-2">Already have an account? <a href="{{'/login'}}" class=" text-decoration-none ">Login</a></p>
 
                     {{-- Error message--}}
-                    @if($errors->any())
+                    {{-- @if($errors->any())
                         <div id="notification">
                             @foreach($errors->all() as $error)
                                 <p class="alert py-1 alert-danger" role="alert">{{$error}}</p>
                             @endforeach
                         </div>
-                    @endif
+                    @endif --}}
 
                     {{-- Registration Form--}}
                     <form action="{{'/register-user'}}" method="post">
@@ -47,6 +47,25 @@
         </div>
     </div>
 </div>
+
+
+@if (session()->has('success'))
+<div id="notification" class=" row justify-content-center">
+    <div class="position-absolute top-50 start-50 translate-middle col-sm-3 alert alert-success text-center text-white"
+        role="alert">
+        {{ session()->get('success') }}
+    </div>
+</div>
+@endif
+
+@if (session()->has('error'))
+<div id="notification" class=" row justify-content-center">
+    <div class="position-absolute top-50 start-50 translate-middle col-sm-3 alert alert-danger text-white text-center"
+        role="alert">
+        {{ session()->get('error') }}
+    </div>
+</div>
+@endif
 
 
 <script>

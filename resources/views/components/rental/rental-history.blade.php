@@ -6,7 +6,8 @@
                 <div class="card px-5 py-5">
                     <div class="row justify-content-between ">
                         <div class="align-items-center col">
-                            <h4>Rental History <span class="text-muted">({{ $rentals->count() }})</span></h4>
+                            <h4>Total Rental = <span class="text-muted">{{ $rentals->count() }}</span></h4>
+                            <h4>Total Spent  = <span class="text-muted">{{ $rentals->sum('total_price') }}</span></h4>
                         </div>
                     </div>
                     <hr class="bg-dark " />

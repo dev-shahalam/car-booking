@@ -2,13 +2,13 @@
 
 <div class="container">
     <div class="row vh-100 justify-content-center align-items-center">
-        @if (session()->has('success'))
+        {{-- @if (session()->has('success'))
             <div id="notification" class=" row justify-content-center">
                 <div class=" col-sm-4 alert alert-success" role="alert">
                     {{ session()->get('success') }}
                 </div>
             </div>
-        @endif
+        @endif --}}
         <div class="col-sm-5 mt-5">
             <div class="card p-3 text-center">
                 <div class="card-body col-sm-12">

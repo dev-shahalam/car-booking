@@ -45,10 +45,8 @@
                                         </td>
                                         <td>
 
-                                            <button type="button"
-                                                class="btn btn-sm btn-primary editStatusBtn"
-                                                data-id="{{ $rental->id }}"
-                                                data-status="{{ $rental->status }}"
+                                            <button type="button" class="btn btn-sm btn-primary editStatusBtn"
+                                                data-id="{{ $rental->id }}" data-status="{{ $rental->status }}"
                                                 data-bs-toggle="modal" data-bs-target="#update-modal">
                                                 Update
                                             </button>
@@ -65,8 +63,8 @@
     </div>
 
 
-     <!-- Edit status Modal -->
-     <div class="modal fade" id="update-modal" tabindex="-1" aria-labelledby="update-modal" aria-hidden="true">
+    <!-- Edit status Modal -->
+    <div class="modal fade" id="update-modal" tabindex="-1" aria-labelledby="update-modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -94,6 +92,19 @@
     </div>
 
     <script>
+        // $('#tableData').DataTable({
+        //     responsive: true
+        // });
+
+        $(document).ready(function() {
+            $('#tableData').DataTable({
+                responsive: false,
+            });
+        });
+    </script>
+
+
+    <script>
         // On clicking the edit button, fill in the modal fields with the current data
         document.querySelectorAll('.editStatusBtn').forEach(button => {
             button.addEventListener('click', function() {
@@ -108,36 +119,23 @@
 
 
     {{-- For data table  --}}
-    <script>
-        $(document).ready(function() {
-            $('#tableData').DataTable({
-                responsive: true,
-            });
-        });
-    </script>
 
-@if (session()->has('success'))
-    <div id="notification" class=" row justify-content-center">
-        <div class="position-absolute top-50 start-50 translate-middle col-sm-3 alert alert-success text-center text-white"
-            role="alert">
-            {{ session()->get('success') }}
+
+    @if (session()->has('success'))
+        <div id="notification" class=" row justify-content-center">
+            <div class="position-absolute top-50 start-50 translate-middle col-sm-3 alert alert-success text-center text-white"
+                role="alert">
+                {{ session()->get('success') }}
+            </div>
         </div>
-    </div>
-@endif
+    @endif
 
-@if (session()->has('error'))
-    <div id="notification" class=" row justify-content-center">
-        <div class="position-absolute top-50 start-50 translate-middle col-sm-3 alert alert-danger text-white text-center"
-            role="alert">
-            {{ session()->get('error') }}
+    @if (session()->has('error'))
+        <div id="notification" class=" row justify-content-center">
+            <div class="position-absolute top-50 start-50 translate-middle col-sm-3 alert alert-danger text-white text-center"
+                role="alert">
+                {{ session()->get('error') }}
+            </div>
         </div>
-    </div>
-@endif
-
-
-
-
-
-
-
+    @endif
 @endsection()
